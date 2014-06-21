@@ -1,3 +1,3 @@
-# enpaste
+# Enpaste
 
-`enpaste` is a wgetpaste-like python script that using `Evernote` as a pastebin service.
+Enpaste is a wgetpaste-like python script using `Evernote` as a pastebin service.
