@@ -5,6 +5,11 @@ from evernote.api.client import EvernoteClient
 import requests
 
 
+class enpaste(object):
+    def __ini__(self, t):
+        self.c = EvernoteClient(token=t)
+
+
 def main():
     callback = 'https://www.evernote.com/'
     client = EvernoteClient(
