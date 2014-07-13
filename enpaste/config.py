@@ -21,7 +21,7 @@ class TestConfig(DefConfig):
     sec = '78caff530ac10b21'
     url = 'https://sandbox.evernote.com/'
     env = True
-    username = 'kemad@qq.com'
+    username = 'test@qq.com'
     password = '71f32998'
 
 
