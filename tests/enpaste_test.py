@@ -5,16 +5,19 @@ import enpaste
 
 
 with open('tests/sample.enml') as fr:
-    enml_sample = fr.read()
+    enml_sample = fr.read().strip()
 
 with open('tests/sample.text') as fr:
-    text_sample = fr.read()
+    text_sample = fr.read().strip()
 
 with open('tests/output.enml') as fr:
-    enml_output = fr.read()
+    enml_output = fr.read().strip()
 
 with open('tests/output.text') as fr:
-    text_output = fr.read()
+    text_output = fr.read().strip()
+
+with open('setup.py') as fr:
+    sample = fr.read().strip()
 
 
 def test_text2enml():
@@ -25,9 +28,13 @@ def test_enml2text():
     assert enpaste.ENote.enml2text(enml_sample) == text_output
 
 
-def test_enpaste_get():
-    pass
+def test_enpaste_get_not_exist():
+    assert not enpaste.EPaste().get('test_file_should_not_exist')
 
 
-def test_enpaste_put():
-    pass
+def test_enpaste_put_and_get():
+    en = enpaste.EPaste()
+    en.put(enpaste.fromfile('setup.py'))
+    assert sample == en.get('setup.py').show()
+
+enpaste.EPaste().delete('setup.py')

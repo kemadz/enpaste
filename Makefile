@@ -11,3 +11,9 @@ dep:
 
 test:
 	python setup.py test
+
+install:
+	pip install .
+
+upgrade:
+	pip install --upgrade .

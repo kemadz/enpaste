@@ -24,9 +24,11 @@ class EPaste(object):
 
     def get(self, fp):
         guid = self.search(fp)
-        note = ENote(self.ns.getNoteContent(self.tk, guid))
-        note.title = fp
-        return note
+        if guid:
+            note = ENote(self.ns.getNoteContent(self.tk, guid))
+            note.title = fp
+            return note
+        return False
 
     def put(self, enote):
         note = Note()
@@ -35,14 +37,19 @@ class EPaste(object):
         # note.notebookGuid = enote.bguid
         self.ns.createNote(note)
 
-    def search(self, ptn):
+    def search(self, fp):
         fl = NoteFilter(order=NoteSortOrder.UPDATED)
-        fl.words = 'intitle:"%s"' % ptn
+        fl.words = 'intitle:"%s"' % fp
         sp = NotesMetadataResultSpec(includeTitle=True)
         result = self.ns.findNotesMetadata(self.tk, fl, 0, 1, sp).notes
         if result:
             return result[0].guid
         return False
+
+    def delete(self, fp):
+        guid = self.search(fp)
+        if guid:
+            self.ns.deleteNote(self.tk, guid)
 
 
 class ENote(object):
@@ -102,9 +109,16 @@ def main():
     args = parser.parse_args()
     en = EPaste()
     if args.action == 'get':
-        print en.get(args.file).show()
+        note = en.get(args.file)
+        if note:
+            print note.show()
+        else:
+            print 'No such file: "%s".' % args.file
     else:
-        en.put(fromfile(args.file))
+        try:
+            en.put(fromfile(args.file))
+        except IOError:
+            print 'No such file: "%s".' % args.file
 
 
 if __name__ == '__main__':
