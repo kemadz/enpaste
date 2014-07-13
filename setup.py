@@ -2,6 +2,7 @@
 # -*- coding: utf-8 -*-
 
 from setuptools import setup
+from enpaste import __version__
 
 
 with open('README.md') as f:
@@ -9,7 +10,7 @@ with open('README.md') as f:
 
 setup(
     name="enpaste",
-    version="0.0.1",
+    version=__version__,
     license='MIT',
     description="A command-line tool using Evernote as a pastebin service",
     author='kemadz',
@@ -24,7 +25,7 @@ setup(
     ],
     entry_points="""
     [console_scripts]
-    enpaste = enpaste.enpaste:main
+    enpaste = enpaste:main
     """,
     classifiers=[
         'License :: OSI Approved :: MIT License',

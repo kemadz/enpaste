@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE en-note SYSTEM "http://xml.evernote.com/pub/enml2.dtd">
+<en-note><pre>#!/bin/sh
+# Funtoo Install Script Chroot Part for Virtualbox
+
+# 校准系统, UTC标准时间
+echo &quot;-*- Adjusting the time -*-&quot;
+ntpdate time1.google.com
+
+# 创建分区
+echo &quot;-*- Partitioning the disk -*-&quot;
+sgdisk \
+-n 1:2048:+512m -c 1:boot \
+-n 2:0:+32m -c 2:gpt -t 2:ef02 \
+-n 3:0:+1g -c 3:swap -t 3:8200 \
+-n 4:0:0 -c 4:root \
+/dev/sda
+
+# 创建文件系统
+echo &quot;-*- Making filesystem -*-&quot;
+mkfs.ext4 -L boot /dev/sda1 &gt;/dev/null 2&gt;&amp;1
+mkfs.ext4 -L root /dev/sda4 &gt;/dev/null 2&gt;&amp;1
+mkswap -L swap /dev/sda3 &gt;/dev/null 2&gt;&amp;1
+
+# 设置文件系统检查频率，每30次mount，或180天
+#tune2fs -l /dev/sda1
+#tune2fs -c 30 -i 180 /dev/sda1
+#tune2fs -c 30 -i 180 /dev/sda4
+
+# 挂载文件系统
+echo &quot;-*- Mounting filesystem -*-&quot;
+mkdir /mnt/fnto
+mount /dev/sda4 /mnt/fnto
+mkdir /mnt/fnto/boot
+mount /dev/sda1 /mnt/fnto/boot
+swapon /dev/sda3
+
+# 下载和解压 stage3 和 portage 包
+echo &quot;-*- Downloading stage3 and portage -*-&quot;
+cd /mnt/fnto
+wget http://goo.gl/aWJShn &gt;/dev/null 2&gt;&amp;1
+wget http://goo.gl/lHHmLf &gt;/dev/null 2&gt;&amp;1
+wget http://fanzhi.org/fnto/bzImage &gt;/dev/null 2&gt;&amp;1
+wget http://fanzhi.org/fnto/lib.txz &gt;/dev/null 2&gt;&amp;1
+echo &quot;-*- Extracting stage3 -*-&quot;
+tar xpf stage3-latest.tar.xz
+echo &quot;-*- Extracting portage -*-&quot;
+tar xf portage-latest.tar.xz -C usr
+
+# Chroot 安装配置新系统
+mount -o bind /dev /mnt/fnto/dev
+mount -o bind /proc /mnt/fnto/proc
+wget https://gist.github.com/kemadz/7559103/raw -O vbox_fnto_chroot.sh
+chmod +x /mnt/fnto/vbox_fnto_chroot.sh
+env -i HOME=/root TERM=$TERM /bin/bash
+chroot /mnt/fnto /bin/bash /vbox_fnto_chroot.sh
+
+# 卸载文件系统并重启
+cd
+umount /mnt/fnto/{boot,dev,proc,}
+shutdown -r now
+</pre></en-note>
