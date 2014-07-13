@@ -37,4 +37,8 @@ def test_enpaste_put_and_get():
     en.put(enpaste.fromfile('setup.py'))
     assert sample == en.get('setup.py').show()
 
-enpaste.EPaste().delete('setup.py')
+
+def delete_test_note():
+    enpaste.EPaste().delete('setup.py')
+
+test_enpaste_put_and_get.teardown = delete_test_note

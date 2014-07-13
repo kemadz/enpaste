@@ -10,7 +10,7 @@ dep:
 	pip install -r requirements.txt
 
 test:
-	python setup.py test
+	nosetests
 
 install:
 	pip install .
