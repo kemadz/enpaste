@@ -58,5 +58,4 @@ chroot /mnt/fnto /bin/bash /vbox_fnto_chroot.sh
 # 卸载文件系统并重启
 cd
 umount /mnt/fnto/{boot,dev,proc,}
-shutdown -r now
-</pre></en-note>
+shutdown -r now</pre></en-note>

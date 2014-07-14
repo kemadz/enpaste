@@ -5,16 +5,16 @@ import enpaste
 
 
 with open('tests/sample.enml') as fr:
-    enml_sample = fr.read().strip()
+    enml_sample = fr.read()
 
 with open('tests/sample.text') as fr:
-    text_sample = fr.read().strip()
+    text_sample = fr.read()
 
 with open('tests/output.enml') as fr:
-    enml_output = fr.read().strip()
+    enml_output = fr.read()
 
 with open('tests/output.text') as fr:
-    text_output = fr.read().strip()
+    text_output = fr.read()
 
 with open('setup.py') as fr:
     sample = fr.read().strip()
@@ -38,7 +38,7 @@ def test_enpaste_put_and_get():
     assert sample == en.get('setup.py').show()
 
 
-def delete_test_note():
+def teardown():
     enpaste.EPaste().delete('setup.py')
 
-test_enpaste_put_and_get.teardown = delete_test_note
+test_enpaste_put_and_get.teardown = teardown

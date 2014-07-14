@@ -27,6 +27,7 @@ class EPaste(object):
         if guid:
             note = ENote(self.ns.getNoteContent(self.tk, guid))
             note.title = fp
+            note.guid = guid
             return note
         return False
 
@@ -35,7 +36,7 @@ class EPaste(object):
         note.title = enote.title
         note.content = enote.enml
         # note.notebookGuid = enote.bguid
-        self.ns.createNote(note)
+        return self.ns.createNote(note)
 
     def search(self, fp):
         fl = NoteFilter(order=NoteSortOrder.UPDATED)
@@ -46,8 +47,9 @@ class EPaste(object):
             return result[0].guid
         return False
 
-    def delete(self, fp):
-        guid = self.search(fp)
+    def delete(self, fp, guid=None):
+        if not guid:
+            guid = self.search(fp)
         if guid:
             self.ns.deleteNote(self.tk, guid)
 
